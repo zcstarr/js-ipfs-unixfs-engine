@@ -137,7 +137,7 @@ The input's file paths and directory structure will be preserved in the [`dag-pb
   - `trickle`: builds [a trickle tree](https://github.com/ipfs/specs/pull/57#issuecomment-265205384)
 - `maxChildrenPerNode` (positive integer, defaults to `174`): the maximum children per node for the `balanced` and `trickle` DAG builder strategies
 - `layerRepeat` (positive integer, defaults to 4): (only applicable to the `trickle` DAG builder strategy). The maximum repetition of parent nodes for each layer of the tree.
-- `reduceSingleLeafToSelf` (boolean, defaults to `false`): optimization for, when reducing a set of nodes with one node, reduce it to that node.
+- `reduceSingleLeafToSelf` (boolean, defaults to `true`): optimization for, when reducing a set of nodes with one node, reduce it to that node.
 - `dirBuilder` (object): the options for the directory builder
   - `hamt` (object): the options for the HAMT sharded directory builder
     - bits (positive integer, defaults to `8`): the number of bits at each bucket of the HAMT
