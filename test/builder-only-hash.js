@@ -27,7 +27,7 @@ module.exports = (repo) => {
         const node = nodes[0]
         expect(node).to.exist()
 
-        ipld.get(new CID(node.multihash), (err, res) => {
+        ipld.get(new CID(node.multihash), '', {onlyNode: true}, (err, res) => {
           expect(err).to.exist()
           done()
         })

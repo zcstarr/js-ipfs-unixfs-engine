@@ -46,6 +46,7 @@ module.exports = (repo) => {
     function addAndReadTestFile ({file, offset, length, strategy = 'balanced', path = '/foo', maxChunkSize}, cb) {
       addTestFile({file, strategy, path, maxChunkSize}, (error, multihash) => {
         if (error) {
+          console.log(error)
           return cb(error)
         }
 
@@ -97,12 +98,10 @@ module.exports = (repo) => {
       const hash = 'QmQmZQxSKQppbsWfVzBvg59Cn3DKtsNVQ94bjAxg2h3Lb8'
       const mhBuf = Buffer.from(bs58.decode(hash))
       const cid = new CID(hash)
-
-      ipld.get(cid, (err, result) => {
+      ipld.get(cid, '', {onlyNode: true}, (err, result) => {
         expect(err).to.not.exist()
-        const node = result.value
+        const node = result[0].value
         const unmarsh = UnixFS.unmarshal(node.data)
-
         pull(
           exporter(mhBuf, ipld),
           pull.collect(onFiles)
@@ -125,7 +124,7 @@ module.exports = (repo) => {
         zip(
           pull(
             ipld.getStream(new CID(hash)),
-            pull.map((res) => UnixFS.unmarshal(res.value.data))
+            pull.map((res) => UnixFS.unmarshal(res[0].value.data))
           ),
           exporter(hash, ipld)
         ),
@@ -148,7 +147,7 @@ module.exports = (repo) => {
         zip(
           pull(
             ipld.getStream(new CID(hash)),
-            pull.map((res) => UnixFS.unmarshal(res.value.data))
+            pull.map((res) => UnixFS.unmarshal(res[0].value.data))
           ),
           exporter(hash, ipld, {
             offset,

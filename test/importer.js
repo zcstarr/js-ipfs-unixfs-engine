@@ -496,7 +496,10 @@ module.exports = (repo) => {
 
           each(files, (file, cb) => {
             const cid = new CID(file.multihash).toV1()
-            ipld.get(cid, cb)
+            ipld.get(cid, '', { onlyNode: true }, (err, node) => {
+              if (err) return cb(err)
+              cb(err, node[0])
+            })
           }, done)
         }
 

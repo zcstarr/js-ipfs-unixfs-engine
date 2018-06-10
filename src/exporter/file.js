@@ -114,10 +114,12 @@ function streamBytes (dag, node, fileSize, offset, length) {
     return pull(
       pull.values(filteredLinks),
       paramap((child, cb) => {
-        dag.get(new CID(child.link.multihash), (error, result) => cb(error, {
+        // NOTE options are hardcoded here to only directly return a single node
+        // This should change when the ipfs interface changes
+        dag.get(new CID(child.link.multihash), '', {onlyNode: true}, (error, result) => cb(error, {
           start: child.start,
           end: child.end,
-          node: result && result.value,
+          node: result && result[0].value,
           size: child.size
         }))
       })

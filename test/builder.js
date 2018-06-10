@@ -44,9 +44,9 @@ module.exports = (repo) => {
           expect(mh.decode(node.multihash).name).to.equal(hashAlg)
 
           // Fetch using hashAlg encoded multihash
-          ipld.get(new CID(node.multihash), (err, res) => {
+          ipld.get(new CID(node.multihash), '', {onlyNode: true}, (err, res) => {
             if (err) return cb(err)
-            const content = UnixFS.unmarshal(res.value.data).data
+            const content = UnixFS.unmarshal(res[0].value.data).data
             expect(content.equals(inputFile.content)).to.be.true()
             cb()
           })

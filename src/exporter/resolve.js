@@ -34,12 +34,14 @@ function createResolver (dag, options, depth, parent) {
       if (item.object) {
         return cb(null, resolveItem(item.object, item, options.offset, options.length))
       }
-      dag.get(new CID(item.multihash), (err, node) => {
+      // NOTE options are hardcoded here to only directly return a single node
+      // This should change when the ipfs interface changes
+      dag.get(new CID(item.multihash), '', {onlyNode: true}, (err, node) => {
         if (err) {
           return cb(err)
         }
         // const name = item.fromPathRest ? item.name : item.path
-        cb(null, resolveItem(node.value, item, options.offset, options.length))
+        cb(null, resolveItem(node[0].value, item, options.offset, options.length))
       })
     }),
     pull.flatten(),
